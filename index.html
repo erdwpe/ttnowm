@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TikTok Downloader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <button id="themeToggle">🌙</button>
+
+    <div class="tabs">
+      <button style="background-color:#add8ff; color: black;" id="tabDownload" class="active">⬇ Download</button>
+      <button style="background-color:#add8ff; color: black;" id="tabResult">📄 Detail Result</button>
+    </div>
+
+    <!-- Tab Download -->
+    <div id="downloadTab" class="tab-content active">
+      <h1>TikTok Downloader <span>No Watermark</span></h1>
+      <input type="text" id="tiktokURL" placeholder="Tempel link video TikTok di sini..." />
+      <button onclick="downloadVideo()">Download</button>
+      <div id="downloadArea"></div> <!-- Untuk tombol unduh -->
+    </div>
+
+    <!-- Tab Hasil -->
+    <div id="resultTab" class="tab-content">
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</body>
+</html>
