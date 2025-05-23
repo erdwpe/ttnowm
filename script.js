@@ -197,3 +197,4 @@ function downloadVideo() {
       Swal.fire('Error', 'Terjadi kesalahan saat memproses.', 'error');
     });
 }
+document.getElementById("year").textContent = new Date().getFullYear();
