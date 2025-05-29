@@ -1,6 +1,3 @@
-document.getElementById("themeToggle").addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-});
 
 function formatDate() {
   const now = new Date();
@@ -38,12 +35,27 @@ const tabDownload = document.getElementById("tabDownload");
 const tabResult = document.getElementById("tabResult");
 const downloadTab = document.getElementById("downloadTab");
 const resultTab = document.getElementById("resultTab");
+const tabFaq = document.getElementById("tabFaq");
+const faqTab = document.getElementById("faqTab");
+
+tabFaq.addEventListener("click", () => {
+  tabDownload.classList.remove("active");
+  tabResult.classList.remove("active");
+  tabFaq.classList.add("active");
+
+  downloadTab.classList.remove("active");
+  resultTab.classList.remove("active");
+  faqTab.classList.add("active");
+});
 
 tabDownload.addEventListener("click", () => {
   tabDownload.classList.add("active");
   tabResult.classList.remove("active");
   downloadTab.classList.add("active");
   resultTab.classList.remove("active");
+  tabFaq.classList.remove("active");
+  faqTab.classList.remove("active");
+
 });
 
 tabResult.addEventListener("click", () => {
@@ -51,6 +63,8 @@ tabResult.addEventListener("click", () => {
   tabDownload.classList.remove("active");
   resultTab.classList.add("active");
   downloadTab.classList.remove("active");
+  tabFaq.classList.remove("active");
+  faqTab.classList.remove("active");
 });
 
 function downloadVideo() {
