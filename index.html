@@ -1,8 +1,39 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "TikTok Downloader Slide Foto & Video",
+      "url": "https://tiktokdl.erdwpe.com/",
+      "description": "Alat gratis untuk download video TikTok tanpa watermark dan audio MP3 dari slide Foto TikTok secara instan.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Erdwpe"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "IDR"
+      }
+    }
+    </script>
+    
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Download video TikTok tanpa watermark & Foto slide dengan mudah. Gratis dan cepat.">
+<meta name="keywords" content="tiktok downloader, tiktok slide downloader, tiktok mp3, download tiktok tanpa watermark, tiktok video downloader">
+<meta name="author" content="erdwpe">
+<meta property="og:title" content="TikTok Downloader Tanpa Watermark & Foto Slide">
+<meta property="og:description" content="Download video TikTok dan audio MP3 dari slide TikTok gratis, cepat dan tanpa watermark.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tiktokdl.erdwpe.com/">
+<meta property="og:image" content="https://tiktokdl.erdwpe.com/icon.png">
+<meta name="robots" content="index, follow">
   <title>TikTok Downloader</title>
   <link href="icon.png" rel="icon" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
@@ -20,25 +51,7 @@
     <!-- Tab Download -->
     <div id="downloadTab" class="tab-content active">
       <h1>TikTok Downloader <span>No Watermark</span></h1>
-
-      <!-- Input Link -->
       <input type="text" id="tiktokURL" placeholder="Tempel link video TikTok di sini..." />
-
-      <!-- Iklan AdSense -->
-      <div style="margin: 1rem 0;">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8305249028760838"
-          crossorigin="anonymous"></script>
-        <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-format="fluid"
-          data-ad-layout-key="-e5+6q-37-df+108"
-          data-ad-client="ca-pub-8305249028760838"
-          data-ad-slot="8270802296"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
       <button onclick="downloadVideo()">Download</button>
       <div id="downloadArea"></div>
     </div>
@@ -48,7 +61,7 @@
       <div id="result"></div>
     </div>
 
-    <!-- Iklan Bawah -->
+    <!-- Iklan AdSense -->
     <div style="margin-top: 2rem;">
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8305249028760838"
         crossorigin="anonymous"></script>
@@ -61,6 +74,17 @@
       <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
+      <section style="margin-top: 2rem; text-align: bottom;">
+        <h3>❓ FAQ TikTok Downloader</h3>
+        <p><strong>Bagaimana cara download video TikTok tanpa watermark?</strong><br>
+        Tempel link TikTok, klik download, lalu buka dan simpan videonya.</p>
+      
+        <p><strong>Bisakah saya mendownload MP3 dari TikTok Foto Slide?</strong><br>
+        Ya, jika konten berupa slide, akan muncul tombol Unduh MP3. Dan juga kamu bisa memilih slide foto yang mana ingin kalian unduh di tab detail result atau bisa langsung download semua foto nya dengan klik tombol unduh semua gambar</p>
+
+        <p><strong>Apakah alat ini gratis?</strong><br>
+        Ya, alat ini 100% gratis dan cepat.</p>
+      </section>
     </div>
 
     <!-- Footer -->
@@ -68,6 +92,7 @@
       © <span id="year"></span> Code Tiktok Downloader By Angga Made With 💚
     </div>
   </div>
+
 
   <script src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
