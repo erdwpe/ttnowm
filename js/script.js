@@ -37,6 +37,25 @@ const downloadTab = document.getElementById("downloadTab");
 const resultTab = document.getElementById("resultTab");
 const tabFaq = document.getElementById("tabFaq");
 const faqTab = document.getElementById("faqTab");
+const tabDonasi = document.getElementById("tabDonasi");
+const donasiTab = document.getElementById("donasiTab");
+const btnQRIS = document.getElementById("btnQRIS");
+const popupQRIS = document.getElementById("popupQRIS");
+
+
+tabDonasi.addEventListener("click", () => {
+  tabDownload.classList.remove("active");
+  tabResult.classList.remove("active");
+  tabFaq.classList.remove("active");
+  tabDonasi.classList.add("active");
+
+  downloadTab.classList.remove("active");
+  resultTab.classList.remove("active");
+  tabDonasi.classList.remove("active");
+  faqTab.classList.remove("active");
+  donasiTab.classList.add("active");
+});
+
 
 tabFaq.addEventListener("click", () => {
   tabDownload.classList.remove("active");
@@ -45,6 +64,7 @@ tabFaq.addEventListener("click", () => {
 
   downloadTab.classList.remove("active");
   resultTab.classList.remove("active");
+  donasiTab.classList.remove("active");
   faqTab.classList.add("active");
 });
 
@@ -55,6 +75,7 @@ tabDownload.addEventListener("click", () => {
   resultTab.classList.remove("active");
   tabFaq.classList.remove("active");
   faqTab.classList.remove("active");
+  donasiTab.classList.remove("active");
 
 });
 
@@ -65,6 +86,8 @@ tabResult.addEventListener("click", () => {
   downloadTab.classList.remove("active");
   tabFaq.classList.remove("active");
   faqTab.classList.remove("active");
+  donasiTab.classList.remove("active");
+
 });
 
 function downloadVideo() {
@@ -212,3 +235,25 @@ function downloadVideo() {
     });
 }
 document.getElementById("year").textContent = new Date().getFullYear();
+
+
+
+btnQRIS.addEventListener("click", () => {
+  popupQRIS.style.display = "flex";
+  popupQRIS.classList.add("show");
+});
+
+function closePopupQRIS() {
+  const popup = document.getElementById("popupQRIS");
+  popup.style.display = "none";
+  popup.classList.remove("show");
+}
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    const popup = document.getElementById("popupQRIS");
+    if (popup && popup.style.display === "flex") {
+      closePopupQRIS();
+    }
+  }
+});

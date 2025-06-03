@@ -234,3 +234,145 @@ body.dark section.faq {
   color: white;
   border-color: white;
 }
+
+/* Donasi QRIS Popup */
+.popup-qris {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.4s ease-in-out;
+}
+.popup-qris.show .popup-content {
+  transform: scale(1);
+  opacity: 1;
+}
+.popup-content {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 3px solid #000;
+  text-align: center;
+  max-width: 350px;
+  margin: auto;
+  box-shadow: 8px 8px 0 #000;
+  position: relative;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: scale(0.95);
+  opacity: 0.95;
+}
+.popup-content img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+.popup-content p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+/* Responsive Tab Layout */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tabs button {
+  flex: 1 1 auto;
+  min-width: 120px;
+  padding: 1rem;
+  font-size: 0.95rem;
+  box-shadow: 4px 4px 0 #000;
+}
+
+@media (max-width: 600px) {
+  .tabs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tabs button {
+    width: 100%;
+    font-size: 1rem;
+  }
+  .tab-content {
+    padding: 0 1rem;
+  }
+}
+.popup-content p {
+  margin: 0.5rem 0 0.75rem;
+  font-size: 0.95rem;
+  color: #333;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.popup-content img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.popup-content {
+  background: #fff;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+  line-height: 1.4;
+  padding: 2rem 1rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #ccc;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 480px) {
+  .popup-content .close-btn {
+    position: absolute;
+    width: auto;
+    min-width: unset;
+    word-wrap: break-word;
+    line-height: 1.4;
+    padding: 2rem 1rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+  
+.close-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background: rgb(247, 0, 0);
+  color: #000;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  

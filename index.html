@@ -35,9 +35,9 @@
 <meta property="og:image" content="https://tiktokdl.erdwpe.com/icon.png">
 <meta name="robots" content="index, follow">
   <title>TikTok Downloader</title>
-  <link href="icon.png" rel="icon" type="image/x-icon">
+  <link href="image/icon.png" rel="icon" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="container">
@@ -45,8 +45,25 @@
   <div class="tabs">
       <button id="tabDownload" class="active">⬇ Download</button>
       <button id="tabResult">📄 Detail Result</button>
-      <button id="tabFaq">📘 FAQ</button>
-    </div>
+      <button id="tabDonasi">💖 Donasi</button>
+<button id="tabFaq">📘 FAQ</button>
+    
+<div id="donasiTab" class="tab-content">
+  <h2>💖 Dukung Proyek Ini</h2>
+  <p>Jika kamu merasa tool ini bermanfaat, kamu bisa bantu support saya melalui donasi.</p>
+  <button id="btnQRIS" class="btn" style="background:#f5b041; color:#000;">📱 Lihat QRIS</button>
+</div>
+
+<div id="popupQRIS" class="popup-qris">
+  <div class="popup-content">
+    <button class="close-btn" onclick="closePopupQRIS()">❌</button>
+    <img id="qrisImage" src="image/qr.jpg" alt="QRIS" />
+    <p>Terima kasih atas donasinya 🙏🏼<br>Support Anda sangat berarti bagi saya.</p>
+    <a href="image/qr.jpg" download="QRIS-donasi.jpg" class="btn" style="margin-top:1rem;">⬇ Unduh QRIS</a>
+  </div>
+</div>
+
+</div>
 
     <!-- Tab Download -->
     <div id="downloadTab" class="tab-content active">
@@ -109,7 +126,7 @@
   </div>
 
 
-  <script src="script.js"></script>
+  <script src="js/script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
