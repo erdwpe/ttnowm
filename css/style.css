@@ -1,7 +1,8 @@
 /* Font & Layout */
 body {
   font-family: 'IBM Plex Mono', monospace;
-  background: #fefefe;
+ background: url('/image/bg.jpg') no-repeat center center fixed;
+  background-size: cover;  
   display: flex;
   justify-content: center;
   align-items: flex-start;
