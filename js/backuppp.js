@@ -215,7 +215,7 @@ function downloadVideo() {
       useRyzumiAPI();
     } else {
       // Coba fetch dari backend kamu dulu
-      fetch('https://api-tiktok-three.vercel.app/api/download', {
+      fetch('https://api-tiktok-three.vercel.app/proxy/download', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
