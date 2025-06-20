@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stalk Center</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet"/>
+    <link rel="shortcut icon" href="https://erdwpe.is-a.dev/store/images/favicon.ico" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Stalking tools 🔍</h1>
+    <h1>Stalk Center 🔍</h1>
     <div class="tabs">
       <button class="tab-btn active" data-target="ml">Mobile Legends</button>
+      <button class="tab-btn" data-target="coc">Clash of Clans</button>
       <button class="tab-btn" data-target="tiktok">TikTok</button>
       <button class="tab-btn" data-target="youtube">YouTube</button>
     </div>
@@ -22,7 +24,12 @@
       <button onclick="stalkML()">Stalk</button>
       <div id="ml-result" class="result-box"></div>
     </div>
-
+    <div id="coc" class="tab-content">
+      <input id="coc-id" placeholder="Masukkan Tag Pemain (#ABC123)" />
+      <button onclick="stalkCoC()">Stalk</button>
+      <div id="coc-result" class="result-box"></div>
+    </div>
+    
     <div id="tiktok" class="tab-content">
       <input id="tiktok-username" placeholder="Username TikTok" />
       <button onclick="stalkTikTok()">Stalk</button>

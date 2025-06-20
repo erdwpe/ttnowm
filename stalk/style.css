@@ -1,6 +1,6 @@
 body {
   font-family: 'Rubik', sans-serif;
-  background: url('/image/bgstalk.png') no-repeat center center fixed;
+  background: url('https://images.alphacoders.com/118/1182103.png') no-repeat center center fixed;
   background-size: cover;
   padding: 2rem;
   color: #111;
@@ -88,6 +88,12 @@ button {
 
 button:hover {
   background: #00c4df;
+}
+.result-box img {
+  margin-top: 10px;
+  border-radius: 8px;
+  max-width: 100px;
+  display: block;
 }
 
 .result-box {
