@@ -1,65 +1,141 @@
-function formatDate() {
-  const now = new Date();
-  return now.toISOString().split("T")[0];
-}
-// === Countdown Ramadhan 18 Feb 2026 ===
+/* ==========================
+    COUNTDOWN RAMADHAN
+========================== */
 function initRamadanCountdown() {
-  // Target date: 18 February 2026, set to midnight local time
-  const target = new Date(2026, 1, 18, 0, 0, 0); // month 0-indexed (1 => Feb)
+  const target = new Date(2026, 1, 18, 0, 0, 0);
 
   const elDays = document.getElementById('cdDays');
   const elHours = document.getElementById('cdHours');
   const elMinutes = document.getElementById('cdMinutes');
   const elSeconds = document.getElementById('cdSeconds');
   const elMsg = document.getElementById('countdownMessage');
-  const container = document.getElementById('ramadanCountdown');
 
-  if (!elDays || !elHours || !elMinutes || !elSeconds || !container) return;
+  if (!elDays || !elHours || !elMinutes || !elSeconds) return;
 
   function update() {
     const now = new Date();
     let diff = Math.max(0, target - now);
 
     if (diff <= 0) {
-      // Waktu telah tiba
       elDays.textContent = '0';
       elHours.textContent = '00';
       elMinutes.textContent = '00';
       elSeconds.textContent = '00';
       elMsg.style.display = 'block';
-      elMsg.textContent = '🌙 Ramadhan telah dimulai — selamat menjalankan ibadah!';
+      elMsg.textContent = '🌙 Ramadhan telah dimulai!';
       clearInterval(intervalId);
       return;
     }
 
-    const secondsTotal = Math.floor(diff / 1000);
-    const days = Math.floor(secondsTotal / (24 * 3600));
-    const hours = Math.floor((secondsTotal % (24 * 3600)) / 3600);
-    const minutes = Math.floor((secondsTotal % 3600) / 60);
-    const seconds = secondsTotal % 60;
+    const s = Math.floor(diff / 1000);
+    const days = Math.floor(s / 86400);
+    const hours = Math.floor((s % 86400) / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const seconds = s % 60;
 
     elDays.textContent = days;
     elHours.textContent = String(hours).padStart(2, '0');
     elMinutes.textContent = String(minutes).padStart(2, '0');
     elSeconds.textContent = String(seconds).padStart(2, '0');
-    elMsg.style.display = 'none';
   }
 
-  // first run
   update();
-  const intervalId = setInterval(update, 1000);
+  var intervalId = setInterval(update, 1000);
+}
+// ----- FAQ: close details when switching tabs + make accordion behavior -----
+function closeAllDetails() {
+  document.querySelectorAll('#faqTab details[open]').forEach(d => d.removeAttribute('open'));
 }
 
-// Jangan panggil lebih dari sekali — jika sudah punya load listener, panggil initRamadanCountdown() di sana.
-// Jika belum, tambahkan listener berikut:
-window.addEventListener('load', function() {
-  try { initRamadanCountdown(); } catch (e) { console.warn('Countdown init error', e); }
+// 1) Close FAQ details whenever a tab button is clicked (safe even if not FAQ)
+document.querySelectorAll('.tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    // after switching tab (if you call switchTab earlier), ensure FAQ details close
+    // small timeout to allow other tab logic to run first (optional)
+    setTimeout(closeAllDetails, 0);
+  });
 });
 
+// 2) Make FAQ behave like an accordion: when opening one <details> close the others
+document.querySelectorAll('#faqTab details summary').forEach(summary => {
+  summary.addEventListener('click', function (e) {
+    const details = this.parentElement; // the <details> element
+    // if details already open, clicking summary will close it natively — we only close others
+    if (!details.hasAttribute('open')) {
+      // close other open details
+      document.querySelectorAll('#faqTab details[open]').forEach(d => {
+        if (d !== details) d.removeAttribute('open');
+      });
+      // allow this one to open normally
+    } else {
+      // clicked on an already open details -> will close; nothing else to do
+    }
+  });
+});
+
+// ---------- UNIVERSAL TAB SWITCHER (replace old tab handlers) ----------
+/* ===== Unified tab-switcher (replace old tab code) ===== */
+(function() {
+  const tabButtons = document.querySelectorAll('.tabs button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  function deactivateAll() {
+    tabButtons.forEach(b => b.classList.remove('active'));
+    tabContents.forEach(c => c.classList.remove('active'));
+  }
+
+  function showTabById(tabId) {
+    const content = document.getElementById(tabId);
+    if (!content) return;
+    deactivateAll();
+    // activate the content
+    content.classList.add('active');
+    // activate corresponding button (by matching data-target)
+    const btn = Array.from(tabButtons).find(x => x.dataset.target === tabId);
+    if (btn) btn.classList.add('active');
+
+    // if countdown tab, init once
+    if (tabId === 'countdownTab' && !window.__ramadanCountdownInited) {
+      try { initRamadanCountdown(); window.__ramadanCountdownInited = true; } 
+      catch(e){ console.warn('Countdown init error', e); }
+    }
+  }
+
+  // wire buttons
+  tabButtons.forEach(btn => {
+    const target = btn.dataset.target;
+    // safety: ensure dataset.target exists
+    if (!target) return;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showTabById(target);
+    });
+  });
+
+  // sync initial active tab: prefer a button with class active, else show downloadTab
+  (function init() {
+    const activeBtn = document.querySelector('.tabs button.active');
+    const startTarget = activeBtn && activeBtn.dataset.target ? activeBtn.dataset.target : 'downloadTab';
+    showTabById(startTarget);
+  })();
+
+})();
+
+
+/* ==========================
+      FORMAT DATE
+========================== */
+function formatDate() {
+  return new Date().toISOString().split("T")[0];
+}
+
+/* ==========================
+      ZIP DOWNLOAD
+========================== */
 function downloadImagesAsZip(imageUrls, zipName) {
   Swal.fire({
     title: 'Membuat ZIP...',
-    html: 'Harap tunggu, sedang mengunduh gambar...',
+    html: 'Harap tunggu...',
     allowOutsideClick: false,
     didOpen: () => Swal.showLoading()
   });
@@ -67,337 +143,233 @@ function downloadImagesAsZip(imageUrls, zipName) {
   const zip = new JSZip();
   const folder = zip.folder(zipName.replace(".zip", ""));
 
-  const fetches = imageUrls.map((url, i) =>
-    fetch(url)
-      .then(res => res.blob())
-      .then(blob => folder.file(`image${i + 1}.jpg`, blob))
+  const tasks = imageUrls.map((url, i) =>
+    fetch(url).then(r => r.blob()).then(b => folder.file(`image${i+1}.jpg`, b))
   );
 
-  Promise.all(fetches).then(() =>
+  Promise.all(tasks).then(() => {
     zip.generateAsync({ type: "blob" }).then(content => {
       Swal.close();
       saveAs(content, zipName);
-      Swal.fire('Berhasil!', 'ZIP berhasil diunduh.', 'success');
-    })
-  );
+      Swal.fire("Berhasil!", "ZIP berhasil diunduh.", "success");
+    });
+  });
 }
 
-// Tab Switching
-const tabDownload = document.getElementById("tabDownload");
-const tabResult = document.getElementById("tabResult");
-const tabFaq = document.getElementById("tabFaq");
-const tabDonasi = document.getElementById("tabDonasi");
-const tabCountdown = document.getElementById("tabCountdown");   // <-- baru
-
-const downloadTab = document.getElementById("downloadTab");
-const resultTab = document.getElementById("resultTab");
-const faqTab = document.getElementById("faqTab");
-const donasiTab = document.getElementById("donasiTab");
-const countdownTab = document.getElementById("countdownTab");  // <-- baru
-
-tabDownload.addEventListener("click", () => {
-  tabDownload.classList.add("active");
-  tabResult.classList.remove("active");
-  tabFaq.classList.remove("active");
-  tabCountdown.classList.remove("active");
-  tabDonasi.classList.remove("active");
-  downloadTab.classList.add("active");
-  resultTab.classList.remove("active");
-  faqTab.classList.remove("active");
-  donasiTab.classList.remove("active");
-  countdownTab.classList.remove("active");
-});
-tabResult.addEventListener("click", () => {
-  tabDownload.classList.remove("active");
-  tabResult.classList.add("active");
-  tabFaq.classList.remove("active");
-  tabCountdown.classList.remove("active");
-  tabDonasi.classList.remove("active");
-  downloadTab.classList.remove("active");
-  resultTab.classList.add("active");
-  faqTab.classList.remove("active");
-  donasiTab.classList.remove("active");
-  countdownTab.classList.remove("active");
-});
-tabFaq.addEventListener("click", () => {
-  tabDownload.classList.remove("active");
-  tabResult.classList.remove("active");
-  tabFaq.classList.add("active");
-  tabCountdown.classList.remove("active");
-  tabDonasi.classList.remove("active");
-  downloadTab.classList.remove("active");
-  resultTab.classList.remove("active");
-  faqTab.classList.add("active");
-  donasiTab.classList.remove("active");
-  countdownTab.classList.remove("active");
-});
-tabDonasi.addEventListener("click", () => {
-  tabDownload.classList.remove("active");
-  tabResult.classList.remove("active");
-  tabFaq.classList.remove("active");
-  tabCountdown.classList.remove("active");
-  tabDonasi.classList.add("active");
-  downloadTab.classList.remove("active");
-  resultTab.classList.remove("active");
-  faqTab.classList.remove("active");
-  donasiTab.classList.add("active");
-  countdownTab.classList.remove("active");
-
-});
-
-tabCountdown.addEventListener("click", () => {
-  tabDownload.classList.remove("active");
-  tabResult.classList.remove("active");
-  tabFaq.classList.remove("active");
-  tabDonasi.classList.remove("active");
-  tabCountdown.classList.add("active");
-
-  downloadTab.classList.remove("active");
-  resultTab.classList.remove("active");
-  faqTab.classList.remove("active");
-  donasiTab.classList.remove("active");
-  countdownTab.classList.add("active");
-
-  // inisialisasi countdown hanya saat tab dibuka (sekali)
-  if (!window.__ramadanCountdownInited) {
-    try {
-      initRamadanCountdown();
-      window.__ramadanCountdownInited = true;
-    } catch (e) {
-      console.warn('Countdown init error', e);
-    }
-  }
-});
+/* ==========================
+      DOWNLOAD VIDEO
+========================== */
 function downloadVideo() {
   const url = document.getElementById('tiktokURL').value;
   const resultDiv = document.getElementById('result');
-  const downloadArea = document.getElementById('downloadArea');
 
-  if (!url) {
-    Swal.fire('Oops!', 'Silakan masukkan link terlebih dahulu.', 'warning');
+  if (!url) return Swal.fire("Oops!", "Masukkan link terlebih dahulu.", "warning");
+
+  /* ==========================
+        TIKTOK HANDLER
+  =========================== */
+  if (url.includes("tiktok.com")) {
+    Swal.fire({
+      title: 'Memproses...',
+      text: 'Mengambil data TikTok...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
+
+    fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`)
+      .then(r => r.json())
+      .then(data => {
+        Swal.close();
+
+        if (!data.data) return Swal.fire("Error", "Video tidak ditemukan", "error");
+
+        const v = data.data;
+        const isImg = Array.isArray(v.images);
+
+        // build output
+        resultDiv.innerHTML = `
+          <div class="card">
+            ${isImg ? `
+              <form id="imageForm"><div class="image-grid">
+                ${v.images.map(img => `
+                  <label class="image-checkbox">
+                    <input type="checkbox" name="img" value="${img}">
+                    <img src="${img}" class="thumb">
+                  </label>
+                `).join("")}
+              </div></form>
+            ` : `<img src="${v.cover}" class="thumb">`}
+
+            <h2>${v.title || "Tanpa judul"}</h2>
+            <p><strong>Author:</strong> ${v.author.nickname} (@${v.author.unique_id})</p>
+
+            <div class="button-wrapper">
+              ${isImg ? `
+                <button id="zipAllBtn" class="btn">Unduh Semua</button>
+                <button id="zipSelectedBtn" class="btn">Unduh Terpilih</button>
+              ` : `
+                <button id="openDownloadBtn" class="btn">Unduh Video</button>
+              `}
+            </div>
+          </div>
+        `;
+
+        // event listener
+        if (isImg) {
+          document.getElementById("zipAllBtn").onclick = () =>
+            downloadImagesAsZip(v.images, `tiktok-${formatDate()}.zip`);
+
+          document.getElementById("zipSelectedBtn").onclick = () => {
+            const selected = [...document.querySelectorAll('input[name="img"]:checked')].map(x => x.value);
+            if (!selected.length) return Swal.fire("Tidak ada gambar dipilih");
+            downloadImagesAsZip(selected, `tiktok-selected-${formatDate()}.zip`);
+          };
+
+          Swal.fire("Slide Foto", "Pilih gambar atau unduh semua", "info");
+        } else {
+          document.getElementById("openDownloadBtn").onclick = () =>
+            window.open(v.play, "_blank");
+
+          Swal.fire("Berhasil!", "Video siap diunduh.", "success");
+        }
+
+        document.querySelector('[data-target="resultTab"]').click();
+      });
+
     return;
   }
 
-  if (url.includes("tiktok.com")) {
+  /* ==========================
+        IG HANDLER
+  =========================== */
+  if (url.includes("instagram.com")) {
     Swal.fire({
-      title: 'Sedang mencari data...',
-      text: 'Harap tunggu, memproses link Tiktok...',
-      allowOutsideClick: false,
+      title: "Memproses...",
+      text: "Mengambil data Instagram...",
       didOpen: () => Swal.showLoading()
     });
-          fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.data) {
-            const video = data.data;
-            const isImagePost = Array.isArray(video.images) && video.images.length > 0;
-    
-            // Bangun HTML lengkap dulu
-            resultDiv.innerHTML = `
-              <div class="card">
-                ${isImagePost
-                  ? `<form id="imageForm"><div class="image-grid">
-                        ${video.images.map((img) => `
-                          <label class="image-checkbox">
-                          <input type="checkbox" name="img" value="${img}">
-                          <img src="${img}" class="thumb" loading="lazy">
-                          </label>`).join("")}
-                    </div></form>`
-                  : `<img src="${video.cover}" alt="thumbnail" class="thumb" />`}
-                <h2>${video.title || 'Tanpa judul'}</h2>
-                <p><strong>👤 Author:</strong> ${video.author.nickname} (@${video.author.unique_id})</p>
-                <p><strong>🎵 Musik:</strong> ${video.music_info?.title || 'Tidak tersedia'}</p>
-                <p><strong>📅 Diposting:</strong> ${new Date(video.create_time * 1000).toLocaleDateString()}</p>
-                <div class="button-wrapper">
-                  ${isImagePost
-                    ? `
-                      <button id="zipAllBtn" class="btn">🗂️ Unduh Semua Gambar</button>
-                      <button id="zipSelectedBtn" class="btn">✅ Unduh Terpilih</button>
-                    `
-                    : `<button id="openDownloadBtn" class="btn">💾 Unduh Video</button>`
-                  }
-                  ${video.music_info?.play
-                    ? `<button id="mp3DownloadBtn" class="btn">🎧 Unduh MP3</button>`
-                    : ''
-                  }
-                </div>
-              </div>
-            `;
-    
-            // 🔗 Pasang tombol klik setelah elemen sudah muncul
-            if (isImagePost) {
-              document.getElementById("zipAllBtn").addEventListener("click", () => {
-                downloadImagesAsZip(video.images, `tiktok-slide-${formatDate()}.zip`);
-              });
-    
-              document.getElementById("zipSelectedBtn").addEventListener("click", () => {
-                const selected = Array.from(document.querySelectorAll('input[name="img"]:checked')).map(el => el.value);
-                if (selected.length === 0) {
-                  Swal.fire('Tidak ada gambar terpilih!', 'Pilih minimal 1 gambar.', 'warning');
-                  return;
-                }
-                downloadImagesAsZip(selected, `tiktok-selected-${formatDate()}.zip`);
-              });
-    
-              Swal.fire('Slide Foto Terdeteksi', 'Silakan pilih gambar yang ingin Anda unduh Atau Anda Dapat Langsung Menggunduh Semua Foto Pilih "Unduh Semua Gambar" Nanti Otomatis Akan Menggunduh Semua Dalam Bentuk Zip', 'info');
-            } else {
-              document.getElementById("openDownloadBtn").addEventListener("click", () => {
-                window.open(video.play, '_blank');
-              });
-    
-              Swal.fire('Berhasil!', 'Video berhasil ditampilkan.', 'success');
-            }
-    
-            if (video.music_info?.play) {
-              document.getElementById("mp3DownloadBtn").addEventListener("click", () => {
-                window.open(video.music_info.play, '_blank');
-              });
-            }
-    
-            tabResult.click(); // pindah ke tab detail
-          } else {
-            Swal.fire('Gagal!', 'Video tidak ditemukan atau link salah.', 'error');
-          }
-        });
-    
-  } else if (url.includes("instagram.com")) {
-    Swal.fire({
-      title: 'Sedang mencari data...',
-      text: 'Harap tunggu, memproses link Instagram...',
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
-    });
-    const isStoryURL = url.includes('/stories/');
 
-    function useRyzumiAPI() {
+    const isStory = url.includes('/stories/');
+    function igFallback() {
       fetch(`https://api.ryzumi.vip/api/downloader/igdl?url=${encodeURIComponent(url)}`)
-        .then(res => res.json())
+        .then(r => r.json())
         .then(data => {
-          if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
-            Swal.fire('Gagal!', 'Data tidak ditemukan.', 'error');
-            return;
-          }
-    
-          const results = data.data.reverse(); // Menampilkan story terbaru dulu
           Swal.close();
-          resultDiv.innerHTML = results.map((item, i) => `
+          if (!data.data) return Swal.fire("Error", "Data tidak ditemukan", "error");
+
+          resultDiv.innerHTML = data.data.map((m, i) => `
             <div class="card">
-              <button class="btn" onclick="window.open('${item.url}', '_blank')">
-                ⬇ Unduh Media ${i + 1}
-              </button>
+              <button class="btn" onclick="window.open('${m.url}', '_blank')">Unduh Media ${i+1}</button>
             </div>
           `).join("");
-    
-          Swal.fire('Berhasil!', 'Konten berhasil dimuat.', 'success');
-          tabResult.click();
-        })
-        .catch(err => {
-          console.error(err);
-          Swal.fire('Error!', 'Gagal memuat dari', 'error');
+
+          document.querySelector('[data-target="resultTab"]').click();
         });
     }
-    
-    if (isStoryURL) {
-      // Story langsung pakai Ryzumi
-      useRyzumiAPI();
-    } else {
-      // Coba fetch dari backend kamu dulu
-      fetch('https://erdwpe.it.com/proxy/download', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ url: url })
+
+    if (isStory) return igFallback();
+
+    fetch("https://erdwpe.it.com/proxy/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url })
+    })
+      .then(r => r.json())
+      .then(data => {
+        Swal.close();
+        if (!data.files) return igFallback();
+
+        resultDiv.innerHTML = data.files.map((m, i) => `
+          <div class="card">
+            <img src="${m.thumbnail}" class="thumb">
+            <button class="btn" onclick="window.open('${m.url}', '_blank')">Unduh Media ${i+1}</button>
+          </div>
+        `).join("");
+
+        document.querySelector('[data-target="resultTab"]').click();
       })
-        .then(res => {
-          if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-          return res.json();
-        })
-        .then(data => {
-          if (!data.files || !Array.isArray(data.files) || data.files.length === 0) {
-            throw new Error('Data kosong.');
-          }
-    
-          const results = data.files;
-          Swal.close();
-          resultDiv.innerHTML = results.map((item, i) => `
-            <div class="card">
-            <img src="${item.thumbnail}" class="thumb" />
-              <button class="btn" onclick="window.open('${item.url}', '_blank')">
-                ⬇ Unduh Media ${i + 1}
-              </button>
-            </div>
-          `).join("");
-    
-          Swal.fire('Berhasil!', 'Konten berhasil dimua.', 'success');
-          tabResult.click();
-        })
-        .catch(err => {
-          console.warn('Fallback ke API Ryzumi karena backend error:', err);
-          useRyzumiAPI(); // Fallback otomatis
-        });
-    }
-    
-  } else if (url.includes("facebook.com") || url.includes("fb.watch")) {
+      .catch(() => igFallback());
+
+    return;
+  }
+
+  /* ==========================
+        FACEBOOK HANDLER
+  =========================== */
+  if (url.includes("facebook.com") || url.includes("fb.watch")) {
     Swal.fire({
-      title: 'Sedang mencari data...',
-      text: 'Harap tunggu, memproses link Facebook...',
-      allowOutsideClick: false,
+      title: "Memproses...",
+      text: "Mengambil data Facebook...",
       didOpen: () => Swal.showLoading()
     });
 
     fetch(`https://api.ryzumi.vip/api/downloader/fbdl?url=${encodeURIComponent(url)}`)
-      .then(res => res.json())
+      .then(r => r.json())
       .then(data => {
-        if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
-          Swal.fire('Gagal!', 'Data tidak ditemukan.', 'error');
-          return;
-        }
-
-        const results = data.data;
         Swal.close();
-        resultDiv.innerHTML = results.map((item, i) => `
+        if (!data.data) return Swal.fire("Error", "Video tidak ditemukan", "error");
+
+        resultDiv.innerHTML = data.data.map((v, i) => `
           <div class="card">
-            <img src="${item.thumbnail}" class="thumb" />
-            <p><strong>Resolusi:</strong> ${item.resolution || 'N/A'}</p>
-            <button class="btn" onclick="window.open('${item.url}', '_blank')">
-              ⬇ Unduh Video ${i + 1}
-            </button>
+            <img src="${v.thumbnail}" class="thumb">
+            <button class="btn" onclick="window.open('${v.url}', '_blank')">Unduh Video ${i+1}</button>
           </div>
         `).join("");
 
-        Swal.fire('Berhasil!', 'Video berhasil ditemukan. Cek di tab Detail Result.', 'success');
-        tabResult.click();
+        document.querySelector('[data-target="resultTab"]').click();
       });
 
-  } else {
-    Swal.fire("Error", "Hanya mendukung TikTok, Instagram, dan Facebook.", "error");
+    return;
   }
+
+  Swal.fire("Error", "Link tidak valid", "error");
 }
 
-// QRIS popup
+/* ==========================
+      QRIS POPUP
+========================== */
+// QRIS popup (robust)
 const btnQRIS = document.getElementById("btnQRIS");
 const popupQRIS = document.getElementById("popupQRIS");
+const downloadQrisBtn = document.getElementById("downloadQrisBtn");
 
-btnQRIS.addEventListener("click", () => {
-  popupQRIS.style.display = "flex";
-  popupQRIS.classList.add("show");
-});
-
-function closePopupQRIS() {
-  popupQRIS.style.display = "none";
-  popupQRIS.classList.remove("show");
+// show popup only when button clicked
+if (btnQRIS && popupQRIS) {
+  btnQRIS.addEventListener("click", () => {
+    // ensure popup is hidden first, then show
+    popupQRIS.classList.add("show");
+    popupQRIS.setAttribute("aria-hidden", "false");
+  });
 }
 
-document.addEventListener("keydown", function (event) {
-  if (event.key === "Escape" && popupQRIS.style.display === "flex") {
+// close function
+function closePopupQRIS() {
+  if (!popupQRIS) return;
+  popupQRIS.classList.remove("show");
+  popupQRIS.setAttribute("aria-hidden", "true");
+}
+
+// click outside modal closes it
+popupQRIS && popupQRIS.addEventListener("click", (e) => {
+  if (e.target === popupQRIS) closePopupQRIS();
+});
+
+// close on Escape
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && popupQRIS && popupQRIS.classList.contains("show")) {
     closePopupQRIS();
   }
 });
-document.getElementById("tiktokURL").addEventListener("keydown", function(e) {
+
+
+/* ==========================
+ ENTER TO SUBMIT
+========================== */
+document.getElementById("tiktokURL").addEventListener("keydown", e => {
   if (e.key === "Enter") {
-    e.preventDefault(); // mencegah reload form
-    downloadVideo();     // panggil fungsi download
+    e.preventDefault();
+    downloadVideo();
   }
 });
+
 document.getElementById("year").textContent = new Date().getFullYear();
