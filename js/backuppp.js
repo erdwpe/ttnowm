@@ -2,6 +2,59 @@ function formatDate() {
   const now = new Date();
   return now.toISOString().split("T")[0];
 }
+// === Countdown Ramadhan 18 Feb 2026 ===
+function initRamadanCountdown() {
+  // Target date: 18 February 2026, set to midnight local time
+  const target = new Date(2026, 1, 18, 0, 0, 0); // month 0-indexed (1 => Feb)
+
+  const elDays = document.getElementById('cdDays');
+  const elHours = document.getElementById('cdHours');
+  const elMinutes = document.getElementById('cdMinutes');
+  const elSeconds = document.getElementById('cdSeconds');
+  const elMsg = document.getElementById('countdownMessage');
+  const container = document.getElementById('ramadanCountdown');
+
+  if (!elDays || !elHours || !elMinutes || !elSeconds || !container) return;
+
+  function update() {
+    const now = new Date();
+    let diff = Math.max(0, target - now);
+
+    if (diff <= 0) {
+      // Waktu telah tiba
+      elDays.textContent = '0';
+      elHours.textContent = '00';
+      elMinutes.textContent = '00';
+      elSeconds.textContent = '00';
+      elMsg.style.display = 'block';
+      elMsg.textContent = '🌙 Ramadhan telah dimulai — selamat menjalankan ibadah!';
+      clearInterval(intervalId);
+      return;
+    }
+
+    const secondsTotal = Math.floor(diff / 1000);
+    const days = Math.floor(secondsTotal / (24 * 3600));
+    const hours = Math.floor((secondsTotal % (24 * 3600)) / 3600);
+    const minutes = Math.floor((secondsTotal % 3600) / 60);
+    const seconds = secondsTotal % 60;
+
+    elDays.textContent = days;
+    elHours.textContent = String(hours).padStart(2, '0');
+    elMinutes.textContent = String(minutes).padStart(2, '0');
+    elSeconds.textContent = String(seconds).padStart(2, '0');
+    elMsg.style.display = 'none';
+  }
+
+  // first run
+  update();
+  const intervalId = setInterval(update, 1000);
+}
+
+// Jangan panggil lebih dari sekali — jika sudah punya load listener, panggil initRamadanCountdown() di sana.
+// Jika belum, tambahkan listener berikut:
+window.addEventListener('load', function() {
+  try { initRamadanCountdown(); } catch (e) { console.warn('Countdown init error', e); }
+});
 
 function downloadImagesAsZip(imageUrls, zipName) {
   Swal.fire({
@@ -34,53 +87,87 @@ const tabDownload = document.getElementById("tabDownload");
 const tabResult = document.getElementById("tabResult");
 const tabFaq = document.getElementById("tabFaq");
 const tabDonasi = document.getElementById("tabDonasi");
+const tabCountdown = document.getElementById("tabCountdown");   // <-- baru
 
 const downloadTab = document.getElementById("downloadTab");
 const resultTab = document.getElementById("resultTab");
 const faqTab = document.getElementById("faqTab");
 const donasiTab = document.getElementById("donasiTab");
+const countdownTab = document.getElementById("countdownTab");  // <-- baru
 
 tabDownload.addEventListener("click", () => {
   tabDownload.classList.add("active");
   tabResult.classList.remove("active");
   tabFaq.classList.remove("active");
+  tabCountdown.classList.remove("active");
   tabDonasi.classList.remove("active");
   downloadTab.classList.add("active");
   resultTab.classList.remove("active");
   faqTab.classList.remove("active");
   donasiTab.classList.remove("active");
+  countdownTab.classList.remove("active");
 });
 tabResult.addEventListener("click", () => {
   tabDownload.classList.remove("active");
   tabResult.classList.add("active");
   tabFaq.classList.remove("active");
+  tabCountdown.classList.remove("active");
   tabDonasi.classList.remove("active");
   downloadTab.classList.remove("active");
   resultTab.classList.add("active");
   faqTab.classList.remove("active");
   donasiTab.classList.remove("active");
+  countdownTab.classList.remove("active");
 });
 tabFaq.addEventListener("click", () => {
   tabDownload.classList.remove("active");
   tabResult.classList.remove("active");
   tabFaq.classList.add("active");
+  tabCountdown.classList.remove("active");
   tabDonasi.classList.remove("active");
   downloadTab.classList.remove("active");
   resultTab.classList.remove("active");
   faqTab.classList.add("active");
   donasiTab.classList.remove("active");
+  countdownTab.classList.remove("active");
 });
 tabDonasi.addEventListener("click", () => {
   tabDownload.classList.remove("active");
   tabResult.classList.remove("active");
   tabFaq.classList.remove("active");
+  tabCountdown.classList.remove("active");
   tabDonasi.classList.add("active");
   downloadTab.classList.remove("active");
   resultTab.classList.remove("active");
   faqTab.classList.remove("active");
   donasiTab.classList.add("active");
+  countdownTab.classList.remove("active");
+
 });
 
+tabCountdown.addEventListener("click", () => {
+  tabDownload.classList.remove("active");
+  tabResult.classList.remove("active");
+  tabFaq.classList.remove("active");
+  tabDonasi.classList.remove("active");
+  tabCountdown.classList.add("active");
+
+  downloadTab.classList.remove("active");
+  resultTab.classList.remove("active");
+  faqTab.classList.remove("active");
+  donasiTab.classList.remove("active");
+  countdownTab.classList.add("active");
+
+  // inisialisasi countdown hanya saat tab dibuka (sekali)
+  if (!window.__ramadanCountdownInited) {
+    try {
+      initRamadanCountdown();
+      window.__ramadanCountdownInited = true;
+    } catch (e) {
+      console.warn('Countdown init error', e);
+    }
+  }
+});
 function downloadVideo() {
   const url = document.getElementById('tiktokURL').value;
   const resultDiv = document.getElementById('result');

@@ -50,7 +50,9 @@
       <button id="tabResult">📄 Detail Result</button>
       <button id="tabDonasi">💖 Donasi</button>
       <button id="tabFaq">📘 FAQ</button>
+      <button id="tabCountdown">🕓 Countdown</button>
     </div>
+
 
     <div id="downloadTab" class="tab-content active">
       <h1>Downloader <span>TikTok, Instagram, Facebook</span></h1>
@@ -64,7 +66,10 @@
     </div>
 
     <div id="faqTab" class="tab-content">
-      <h2 style="text-align:left;">❓ FAQ Downloader</h2>
+      <h2 style="text-align:left;  background: yellow;
+      padding: 0 6px;
+      border-radius: 4px;
+      display: inline-block;">❓ FAQ Downloader</h2>
       <section class="faq-section">
         <details>
           <summary>Bagaimana cara download video TikTok tanpa watermark?</summary>
@@ -86,11 +91,33 @@
     </div>
 
     <div id="donasiTab" class="tab-content">
-      <h2>💖 Dukung Proyek Ini</h2>
-      <p>Jika kamu merasa tool ini bermanfaat, kamu bisa bantu support saya melalui donasi.</p>
+      <h2 style="text-align:left;  background: yellow;
+      padding: 0 6px;
+      border-radius: 4px;
+      display: inline-block;">💖 Dukung Proyek Ini</h2>
+      <p style="text-align:left;  background: yellow;
+      padding: 0 6px;
+      border-radius: 4px;
+      display: inline-block;">Jika kamu merasa tool ini bermanfaat, kamu bisa bantu support saya melalui donasi.</p>
       <button id="btnQRIS" class="btn" style="background:#f5b041; color:#000;">📱 Lihat QRIS</button>
     </div>
+   <div id="countdownTab" class="tab-content">
+      <h2 style="text-align:left;  background: yellow;
+      padding: 0 6px;
+      border-radius: 4px;
+      display: inline-block;">⏳ Hitung Mundur Ramadhan</h2>
+      <p class="countdown-sub">Ramadhan will, inshaAllah, be coming on <strong>February 18, 2026 🌙✨</strong></p>
 
+      <div id="ramadanCountdown" class="card countdown-card" aria-live="polite">
+        <div class="countdown-values" id="countdownValues">
+          <div class="count-item"><b id="cdDays">0</b><small>Hari</small></div>
+          <div class="count-item"><b id="cdHours">00</b><small>Jam</small></div>
+          <div class="count-item"><b id="cdMinutes">00</b><small>Menit</small></div>
+          <div class="count-item"><b id="cdSeconds">00</b><small>Detik</small></div>
+        </div>
+        <p id="countdownMessage" class="countdown-message" style="display:none;"></p>
+      </div>
+    </div>
     <div id="popupQRIS" class="popup-qris">
       <div class="popup-content">
         <button class="close-btn" onclick="closePopupQRIS()">❌</button>
@@ -99,6 +126,7 @@
         <a href="image/qr.jpg" download="QRIS-donasi.jpg" class="btn" style="margin-top:1rem;">⬇ Unduh QRIS</a>
       </div>
     </div>
+
     <!-- Footer -->
     <div class="app-footer">
       © <span id="year"></span> Code Downloader TikTok, Instagram Dan Facebook Dikembangkan Oleh Angga 💚
@@ -115,7 +143,7 @@
     });
   </script>
   
-  <script src="js/script.js"></script>
+  <script src="js/backuppp.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
