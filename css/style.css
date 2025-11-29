@@ -14,7 +14,7 @@
 }
 
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:'IBM Plex Mono',monospace;background:url('https://raw.githubusercontent.com/erdwpe/ttnowm/refs/heads/main/image/bg.jpg') no-repeat center center fixed;background-size:cover;}
+html,body{height:100%;margin:0;font-family:'IBM Plex Mono',monospace;background:url('/image/bg.jpg') no-repeat center center fixed;background-size:cover;}
 
 /* center container on page */
 body{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:2rem 1rem}
