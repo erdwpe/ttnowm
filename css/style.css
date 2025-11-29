@@ -1,8 +1,8 @@
 /* Font & Layout */
 body {
   font-family: 'IBM Plex Mono', monospace;
- background: url('/image/bg.jpg') no-repeat center center fixed;
-   background-size: cover;  
+  background: url('/image/bg.jpg') no-repeat center center fixed;
+  background-size: cover;  
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -21,11 +21,14 @@ h1, .tabs button {
   -webkit-backdrop-filter: blur(6px);
   border: 2px solid #000;
   border-radius: 20px;
-  padding: 20px;
+  padding: 2rem;
+  width: 100%;
+  text-align: center;
   max-width: 700px;
   margin: 20px auto;
   box-shadow: 5px 5px 0px #000;
 }
+
 
 /* Heading */
 h1 {
