@@ -14,7 +14,7 @@
 }
 
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:'IBM Plex Mono',monospace;background:url('/image/bg.jpg') no-repeat center center fixed;background-size:cover;}
+html,body{height:100%;margin:0;font-family:'IBM Plex Mono',monospace;background:url('https://raw.githubusercontent.com/erdwpe/ttnowm/refs/heads/main/image/bg.jpg') no-repeat center center fixed;background-size:cover;}
 
 /* center container on page */
 body{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:2rem 1rem}
@@ -52,6 +52,70 @@ h1 span{background:yellow;padding:0 6px;border-radius:4px}
 @media (max-width:600px){
   .tabs{flex-direction:column;align-items:stretch}
   .tabs button{width:100%}
+}
+/* ===== FIX: constrain result images and grid so they never overflow container ===== */
+
+/* General: make images responsive inside cards */
+.card img.thumb,
+.card .thumb,
+.image-grid img,
+.image-checkbox img,
+.preview {
+  max-width: 100%;     /* jangan lebih lebar dari parent */
+  width: 100%;         /* isi lebar kolom/grid */
+  height: auto;        /* proporsional */
+  display: block;
+  object-fit: contain; /* jangan crop untuk single images */
+}
+
+/* Single big preview inside .card: Batasi tinggi supaya tidak memecah layout */
+.card .thumb.preview-large,
+.card img.thumb.preview-large {
+  max-height: 70vh;    /* tinggi maksimum 70% viewport */
+  object-fit: contain;
+}
+
+/* Image grid layout: pastikan tiap item terbatas dan rapi */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.image-grid .image-checkbox {
+  overflow: hidden;    /* mencegah gambar keluar */
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Jika gambar muncul sebagai block (single image result), bungkus supaya tidak melebar */
+#result .card {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;    /* mencegah isi memanjang keluar */
+}
+
+/* Jika thumbnail disisipkan langsung di #result (single image), batasi tinggi dan beri center */
+#result .card > img.thumb {
+  max-width: 100%;
+  max-height: 70vh;
+  margin: 0 auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Tombol/gap dan teks di bawah gambar tetap terlihat */
+#result .card .button-wrapper,
+#result .card p,
+#result .card h2 {
+  position: relative;
+  z-index: 2;
+}
+
+/* Mobile tweak: lebih ketat supaya tidak terlalu besar */
+@media (max-width: 480px) {
+  .image-grid { grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; }
+  .card .thumb.preview-large { max-height: 55vh; }
 }
 
 /* ---------- Tab visibility (only active shows) ---------- */
