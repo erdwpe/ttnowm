@@ -391,7 +391,34 @@ button:hover, .btn:hover{background:var(--accent-hover);transform:translateY(-2p
     align-items: center;
     justify-content: center;
   }
-    
+    /* === AdSense wrapper (responsive & non-intrusive) === */
+.ad-slot {
+  width: 100%;
+  max-width: 760px;      /* sesuaikan lebar maksimal iklan di dalam container */
+  margin: 12px auto;     /* center */
+  padding: 6px;
+  box-sizing: border-box;
+  display: block;
+  /* opsional: sedikit glass / border agar terlihat rapi */
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+}
+
+/* Top ad punya spacing lebih */
+.ad-slot-top {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Untuk memaksa tinggi tertentu di desktop agar layout stabil,
+   tapi biarkan fluid bekerja otomatis; jangan set fixed height di mobile */
+@media (min-width: 960px) {
+  .ad-slot { max-width: 900px; padding: 8px; }
+}
+
+/* Jika ingin sembunyikan iklan untuk testing lokal (opsional)
+   .ad-slot { display: none !important; } */
+
 /* ---------- Accessibility / small screen fixes ---------- */
 @media(max-width:480px){
   .count-item{min-width:56px;padding:.4rem}
